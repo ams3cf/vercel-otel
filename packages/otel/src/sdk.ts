@@ -168,7 +168,12 @@ export class Sdk {
     this.tracerProvider = tracerProvider;
 
     if (configuration.logRecordProcessor) {
-      const loggerProvider = new LoggerProvider({ resource });
+      // const loggerProvider = new LoggerProvider({ resource });
+      // Applying patch from https://github.com/vercel/otel/pull/136
+      const loggerProvider = new LoggerProvider({
+        resource,
+        logRecordLimits: {},
+      });
       this.loggerProvider = loggerProvider;
       loggerProvider.addLogRecordProcessor(configuration.logRecordProcessor);
       logs.setGlobalLoggerProvider(loggerProvider);
